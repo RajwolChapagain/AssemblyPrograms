@@ -1,3 +1,7 @@
+; Name: Rajwol Chapagain
+; Assignment: Creative Etchings - A program that utilizes macros, functions, and structs to print a drawing to the screen
+; Date: 11/24/2024, Sunday
+
 STRUC PosChar
 	.esc RESB 1
 	.bracket RESB 1
@@ -111,6 +115,7 @@ top6:
 	mov ebx,0
 	int 80h
 
+; Expects the address of the 2-digit number to be incremented to be pushed onto the stack right beneath the return address
 incnum:
 	push eax
 	mov eax, [esp + 8] ; eax now contains the address of the first digit in the 2-digit number we want to increment
@@ -131,6 +136,7 @@ incnum:
 	pop eax
 	ret
 
+; Expects the address of the 2-digit number to be decremented to be pushed onto the stack right beneath the return address
 decnum:
 	push eax
 	mov eax, [esp + 8] ; eax now contains the address of the first digit in the 2-digit number we want to decrement
