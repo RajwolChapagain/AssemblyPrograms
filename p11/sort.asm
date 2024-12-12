@@ -37,6 +37,7 @@ new_line_len: dd 1
 SECTION .text
 global _main
 _main:
+	;call print_formatted_num
 	print clear, clear_len
 	print title, title_len
 
@@ -130,11 +131,68 @@ print_array:
 		xor eax, eax
 		mov ax, [ebx]
 		call convert_num_to_char
-		print print_field, charlen
+		call print_formatted_num
 		add ebx, 2
 		loop print_num
 
 	pop ecx
 	pop ebx
 	pop eax
+	ret
+
+; Expects print_field to contain appropriate ascii codes
+print_formatted_num:
+	push ecx
+	push esi
+	push edi
+
+	mov ecx, [charlen]
+	mov esi, print_field
+	xor edi, edi
+
+	print_digit:
+		; edi is used as a flag to determine whether or not a non-zero value has been printed
+		cmp edi, 1
+		je start_printing
+
+		; Don't print if the value is a zero
+		mov al, [esi]
+		cmp al, 48
+		je done_printing
+	
+		; Used custom printing block because print macro didn't play well with memory addresss stored in a register
+		start_printing:
+		mov edi, 1
+		push eax
+		push ebx
+		push ecx
+		push edx
+
+		mov eax, 4
+		mov ebx, 1
+		mov ecx, esi
+		mov edx, 1
+		int 80h
+
+
+		pop edx
+		pop ecx
+		pop ebx
+		pop eax
+
+		done_printing:
+
+		; If we're on the third to last loop, that means that the next loop is going to be over the last digit.
+		; We need to print this digit regardless of whether or not any characters before it have been printed.
+		cmp ecx, 3
+		jne increment_and_loop
+		mov edi, 1
+
+		increment_and_loop:
+		inc esi
+		loop print_digit
+	
+	pop edi
+	pop esi	
+	pop ecx
 	ret
