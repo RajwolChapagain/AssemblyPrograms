@@ -19,6 +19,7 @@ global _main
 _main:
 	mov ebx, nums
 	mov ecx, numslen
+	call sort_array
 	call print_array
 
 lastBreak:
@@ -26,6 +27,8 @@ lastBreak:
 	mov ebx,0
 	int 80h
 
+; Expects:
+; ax: Number to be printed
 convert_num_to_char:
 	push eax
 	push ebx
@@ -47,6 +50,47 @@ convert_num_to_char:
 	pop eax
 	ret
 
+; Expects:
+; ebx: pointer to start of array
+; ecx: number of array elements
+sort_array:
+	push ebx
+	push ecx
+	push edx
+	push esi
+
+	; Move array element count into edx
+	mov edx, ecx
+	dec ecx
+
+	outer_loop:
+		push ecx
+		push ebx
+		inner_loop:
+			mov ax, [ebx]
+			mov si, [ebx + 2]
+			cmp ax, si
+			jbe done
+			; swap
+			mov [ebx], si
+			mov [ebx + 2], ax
+			done:
+			add ebx, 2
+			loop inner_loop
+
+		pop ebx
+		pop ecx
+		loop outer_loop
+
+	pop esi
+	pop edx
+	pop ecx
+	pop ebx
+	ret
+
+; Expects:
+; ebx: pointer to start of array
+; ecx: number of array elements
 print_array:
 	push eax
 	push ebx
