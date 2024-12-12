@@ -10,7 +10,7 @@
 
 SECTION .data
 nums: dw 2000, 3000, 0, 65535, 0, 1, 2, 3, 100
-numslen: EQU ($-nums)
+numslen: EQU ($-nums)/2
 print_field: db '0', '0', '0', '0', '0', 10
 charlen: dd 6
 
@@ -18,7 +18,7 @@ SECTION .text
 global _main
 _main:
 	mov ebx, nums
-	mov ecx, 9
+	mov ecx, numslen
 	call print_array
 
 lastBreak:
@@ -48,6 +48,10 @@ convert_num_to_char:
 	ret
 
 print_array:
+	push eax
+	push ebx
+	push ecx
+
 	print_num:
 		xor eax, eax
 		mov ax, [ebx]
@@ -56,5 +60,7 @@ print_array:
 		add ebx, 2
 		loop print_num
 
+	pop ecx
+	pop ebx
+	pop eax
 	ret
-	
