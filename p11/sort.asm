@@ -14,12 +14,36 @@ numslen: EQU ($-nums)/2
 print_field: db '0', '0', '0', '0', '0', 10
 charlen: dd 6
 
+clear:	db 27, "[2J", 27, "[H"
+clear_len: dd ($-clear)
+
+title: db "*** Rajwol's Array Sorting Program ***",10,10,10
+title_len: dd ($-title)
+
+orig_array: db "Original Array",10,10
+orig_array_len: dd ($-orig_array)
+
+sorted_array: db "Sorted Array",10,10
+sorted_array_len: dd ($-sorted_array)
+
+new_line: db 10
+new_line_len: dd 1
+
 SECTION .text
 global _main
 _main:
+	print clear, clear_len
+	print title, title_len
+
+	print orig_array, orig_array_len
+
 	mov ebx, nums
 	mov ecx, numslen
+	call print_array
 	call sort_array
+
+	print new_line, new_line_len
+	print sorted_array, sorted_array_len
 	call print_array
 
 lastBreak:
