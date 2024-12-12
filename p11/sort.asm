@@ -1,3 +1,8 @@
+; Name: Rajwol Chapagain
+; Class: CSC 322
+; Assignment: Sort Array - A program that sorts a given array of unsigned words and prints them
+; Date: 12/12/24, Thursday
+
 %macro print 2
 	pusha
 	mov eax,4
@@ -87,6 +92,7 @@ sort_array:
 	mov edx, ecx
 	dec ecx
 
+	; Bubble sort
 	outer_loop:
 		push ecx
 		push ebx
