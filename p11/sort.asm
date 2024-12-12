@@ -17,9 +17,9 @@ charlen: dd 6
 SECTION .text
 global _main
 _main:
-	mov eax, 0
-	call convert_num_to_char
-	print print_field, charlen
+	mov ebx, nums
+	mov ecx, 9
+	call print_array
 
 lastBreak:
 	mov eax,1
@@ -46,3 +46,15 @@ convert_num_to_char:
 	pop ebx
 	pop eax
 	ret
+
+print_array:
+	print_num:
+		xor eax, eax
+		mov ax, [ebx]
+		call convert_num_to_char
+		print print_field, charlen
+		add ebx, 2
+		loop print_num
+
+	ret
+	
